@@ -1,0 +1,476 @@
+---
+title: "Pronósticos"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    theme: paper
+    social: [ "twitter", "facebook", "menu"]
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(xml2)
+library(rvest)
+library(purrr)
+library(prophet)
+library(lubridate)
+library(hablar)
+```
+
+```{r}
+fuente1 <- "https://coinmarketcap.com/currencies/bitcoin/historical-data/?start=20141201&end=20200617"
+fuente2 <- "https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20130428&end=20200617"
+fuente3 <- "https://coinmarketcap.com/currencies/xrp/historical-data/?start=20130428&end=20200617"
+fuente4 <- "https://coinmarketcap.com/currencies/litecoin/historical-data/?start=20130428&end=20200617"
+fuente5 <- "https://coinmarketcap.com/currencies/bitcoin-cash/historical-data/?start=20130428&end=20200617"
+fuente6 <- "https://coinmarketcap.com/currencies/basic-attention-token/historical-data/?start=20130428&end=20200617"
+fuente7 <- "https://coinmarketcap.com/currencies/decentraland/historical-data/?start=20130428&end=20200617"
+fuente8 <- "https://coinmarketcap.com/currencies/golem-network-tokens/historical-data/?start=20130428&end=20200617"
+```
+
+Bitcoin
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico BTC
+
+```{r}
+datos1 <- read_html(fuente1) 
+tabla1 <- datos1 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla12 <- tabla1[[3]]
+tabla12$Date <- mdy(tabla12$Date)
+tabla12 <- tabla12[with(tabla12, order(tabla12$Date)), ] 
+colnames(tabla12) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla12$Close<-as.numeric(gsub(",", "", tabla12$Close))
+ds1 <- tabla12$Date
+y1 <- log(tabla12$Close)
+df1 <- data.frame(ds1, y1)
+colnames(df1) <- c("ds","y")
+m1 <- prophet(df1)
+future1 <- make_future_dataframe(m1, periods = 365)
+forecast1 <- predict(m1, future1)
+
+plot(m1, forecast1)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia BTC
+
+```{r}
+prophet_plot_components(m1, forecast1)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo BTC
+```{r}
+dyplot.prophet(m1, forecast1)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Ethereum
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico ETH
+
+```{r}
+datos2 <- read_html(fuente2) 
+tabla2 <- datos2 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla22 <- tabla2[[3]]
+tabla22$Date <- mdy(tabla22$Date)
+tabla22 <- tabla22[with(tabla22, order(tabla22$Date)), ] 
+colnames(tabla22) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla22$Close<-as.numeric(gsub(",", "", tabla22$Close))
+ds2 <- tabla22$Date
+y2 <- log(tabla22$Close)
+df2 <- data.frame(ds2, y2)
+colnames(df2) <- c("ds","y")
+m2 <- prophet(df2)
+future2 <- make_future_dataframe(m2, periods = 365)
+forecast2 <- predict(m2, future2)
+
+plot(m2, forecast2)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia ETH
+
+```{r}
+prophet_plot_components(m2, forecast2)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo ETH
+```{r}
+dyplot.prophet(m2, forecast2)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Ripple
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico XRP
+
+```{r}
+datos3 <- read_html(fuente3) 
+tabla3 <- datos3 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla32 <- tabla3[[3]]
+tabla32$Date <- mdy(tabla32$Date)
+tabla32 <- tabla32[with(tabla32, order(tabla32$Date)), ] 
+colnames(tabla32) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla32$Close<-as.numeric(gsub(",", "", tabla32$Close))
+ds3 <- tabla32$Date
+y3 <- log(tabla32$Close)
+df3 <- data.frame(ds3, y3)
+colnames(df3) <- c("ds","y")
+m3 <- prophet(df3)
+future3 <- make_future_dataframe(m3, periods = 365)
+forecast3 <- predict(m3, future3)
+
+plot(m3, forecast3)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia XRP
+
+```{r}
+prophet_plot_components(m3, forecast3)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo XRP
+```{r}
+dyplot.prophet(m3, forecast3)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Litecoin
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico LTC
+
+```{r}
+datos4 <- read_html(fuente4) 
+tabla4 <- datos4 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla42 <- tabla4[[3]]
+tabla42$Date <- mdy(tabla42$Date)
+tabla42 <- tabla42[with(tabla42, order(tabla42$Date)), ] 
+colnames(tabla42) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla42$Close<-as.numeric(gsub(",", "", tabla42$Close))
+ds4 <- tabla42$Date
+y4 <- log(tabla42$Close)
+df4 <- data.frame(ds4, y4)
+colnames(df4) <- c("ds","y")
+m4 <- prophet(df4)
+future4 <- make_future_dataframe(m4, periods = 365)
+forecast4 <- predict(m4, future4)
+
+plot(m4, forecast4)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia LTC
+
+```{r}
+prophet_plot_components(m4, forecast4)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo LTC
+```{r}
+dyplot.prophet(m4, forecast4)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Bitcoin Cash
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico BCH
+
+```{r}
+datos5 <- read_html(fuente5) 
+tabla5 <- datos5 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla52 <- tabla5[[3]]
+tabla52$Date <- mdy(tabla52$Date)
+tabla52 <- tabla52[with(tabla52, order(tabla52$Date)), ] 
+colnames(tabla52) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla52$Close<-as.numeric(gsub(",", "", tabla52$Close))
+ds5 <- tabla52$Date
+y5 <- log(tabla52$Close)
+df5 <- data.frame(ds5, y5)
+colnames(df5) <- c("ds","y")
+m5 <- prophet(df5)
+future5 <- make_future_dataframe(m5, periods = 365)
+forecast5 <- predict(m5, future5)
+
+plot(m5, forecast5)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia BCH
+
+```{r}
+prophet_plot_components(m5, forecast5)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo BCH
+```{r}
+dyplot.prophet(m5, forecast5)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Basic Attention Token
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico BAT
+
+```{r}
+datos6 <- read_html(fuente6) 
+tabla6 <- datos6 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla62 <- tabla6[[3]]
+tabla62$Date <- mdy(tabla62$Date)
+tabla62 <- tabla62[with(tabla62, order(tabla62$Date)), ] 
+colnames(tabla62) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla62$Close<-as.numeric(gsub(",", "", tabla62$Close))
+ds6 <- tabla62$Date
+y6 <- log(tabla62$Close)
+df6 <- data.frame(ds6, y6)
+colnames(df6) <- c("ds","y")
+m6 <- prophet(df6)
+future6 <- make_future_dataframe(m6, periods = 365)
+forecast6 <- predict(m6, future6)
+
+plot(m6, forecast6)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia BAT
+
+```{r}
+prophet_plot_components(m6, forecast6)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo BAT
+```{r}
+dyplot.prophet(m6, forecast6)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Decentraland
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico MANA
+
+```{r}
+datos7 <- read_html(fuente7) 
+tabla7 <- datos7 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla72 <- tabla7[[3]]
+tabla72$Date <- mdy(tabla72$Date)
+tabla72 <- tabla72[with(tabla72, order(tabla72$Date)), ] 
+colnames(tabla72) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla72$Close<-as.numeric(gsub(",", "", tabla72$Close))
+ds7 <- tabla72$Date
+y7 <- log(tabla72$Close)
+df7 <- data.frame(ds7, y7)
+colnames(df7) <- c("ds","y")
+m7 <- prophet(df7)
+future7 <- make_future_dataframe(m7, periods = 365)
+forecast7 <- predict(m7, future7)
+
+plot(m7, forecast7)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia MANA
+
+```{r}
+prophet_plot_components(m7, forecast7)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo MANA
+```{r}
+dyplot.prophet(m7, forecast7)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Golem
+=====================================
+
+Row
+-------------------------------------
+
+### Pronóstico GNT
+
+```{r}
+datos8 <- read_html(fuente8) 
+tabla8 <- datos8 %>%
+  html_nodes("table") %>%
+  html_table(header=T)
+tabla82 <- tabla8[[3]]
+tabla82$Date <- mdy(tabla82$Date)
+tabla82 <- tabla82[with(tabla82, order(tabla82$Date)), ] 
+colnames(tabla82) <- c("Date","Open","High","Low","Close","Volume","Market_Cap")
+tabla82$Close<-as.numeric(gsub(",", "", tabla82$Close))
+ds8 <- tabla82$Date
+y8 <- log(tabla82$Close)
+df8 <- data.frame(ds8, y8)
+colnames(df8) <- c("ds","y")
+m8 <- prophet(df8)
+future8 <- make_future_dataframe(m8, periods = 365)
+forecast8 <- predict(m8, future8)
+
+plot(m8, forecast8)
+
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+### Tendencia GNT
+
+```{r}
+prophet_plot_components(m8, forecast8)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Row
+-------------------------------
+
+### Gráfico Interactivo GNT
+```{r}
+dyplot.prophet(m8, forecast8)
+```
+
+> Fuente: Elaboración propia con datos de Coinmarketcap
+
+Resumen
+===========================================
+
+Acerca de la metodología
+
+* La información es obtenida mediante scraping de: https://coinmarketcap.com
+* Se implementa un modelo prophet simple, para series de tiempo no lineales de la forma:
+
+  y(t) = g(t) + s(t) + h(t) + e(t)
+
+  Donde:
+
+  g(t) = tendencia de los modelos (modelo de crecimiento saturado y un modelo lineal por partes) que describe el aumento o la disminución a largo plazo de los datos.
+  
+  s(t) = modelo para la estacionalidad con la serie Fourier para describir efectos por factores estacionales como la época del año
+  
+  h(t) = modelo para la estacionalidad para describir efectos por factores estacionales como efectos vacacionales y eventos de gran magnitud ("human-scale” seasonalities)
+  
+  e(t) = el término de erreor asociado al modelo
+   
+* El pronóstico se realiza a 365 días a partir de `r format(Sys.Date(), format = "%B %d, %Y")`
+
+* Para más información sobre prophet
+
+  https://towardsdatascience.com/forecasting-with-prophet-d50bbfe95f91
+  
+  https://research.fb.com/blog/2017/02/prophet-forecasting-at-scale/
+  
+  https://github.com/facebook/prophet
+
+
+Créditos
+========================================
+
+Created by: Cesar Hernández
+
+Correo: cghv94@outlook.es
+
+Twitter: @[cghv94](https://twitter.com/cghv94)
+
+Esta obra fue generada mediante R en `r format(Sys.Date(), format = "%B %d, %Y")` y está bajo una [licencia de Creative Commons, Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.es).
+
+Creative Commons (CC).
